@@ -86,14 +86,20 @@ var enemyInfo = [
 ];
 
 var fight = function (enemy) {
-    // Alert players that they are starting the round
+    // keep track of who attacks first
+    var isPlayerTurn = true;
+
+    if (Math.random() > 0.5) {
+        isPlayerTurn = false;
+    }
 
     while (enemy.health > 0 && playerInfo.health > 0) {
+        
+       if (isPlayerTurn) {
         if (fightOrSkip()) {
             break;
         }
-        
-        // Subtract the value of `playerInfo.attack` from the value of `enemy.health` and use that result to update the value in the `enemy.health` variable
+            // Subtract the value of `playerInfo.attack` from the value of `enemy.health` and use that result to update the value in the `enemy.health` variable
        var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
        enemy.health = Math.max(0, enemy.health - damage);
 
@@ -112,6 +118,8 @@ var fight = function (enemy) {
             window.alert(enemy.name + " still has " + enemy.health + " health left.");
         }
 
+       } else {
+           
         // Subtract the value of `enemy.attack` from the value of `playerInfo.health` and use that result to update the value in the `playerInfo.health` variable
         var damage = randomNumber(enemy.attack -3, enemy.attack);
         playerInfo.health = Math.max(0, playerInfo.health - damage);
@@ -126,6 +134,8 @@ var fight = function (enemy) {
         } else {
             window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
         }
+       }
+       isPlayerTurn = !isPlayerTurn;
     }
 };
 
@@ -136,18 +146,14 @@ var shop = function() {
     );
 
     // use switch to carry out action
-    switch (shopOptionPrompt) {        
-        case "REFILL":
-        case "refill":
+    switch (parseInt(shopOptionPrompt)) {        
+        case 1:
             playerInfo.refillHealth();
             break;
-        case "REFILL":
-        case "upgrade":
-        case "UPGRADE":
+        case 2:
             playerInfo.upgradeAttack();
             break;
-        case "leave":
-        case "LEAVE":
+        case 3:
             window.alert("Leaving the shop.");
             break;
         default:
